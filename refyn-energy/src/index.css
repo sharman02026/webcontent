@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    margin: 0;
+    min-width: 320px;
+    overflow-x: hidden;
+    background: #fff;
+    color: #25291f;
+    font-family: Inter, Manrope, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  p {
+    color: #5a5f53;
+    line-height: 1.75;
+  }
+  button {
+    cursor: pointer;
+  }
+  ::selection {
+    background: #5c6425;
+    color: #fff;
+  }
+}
+
+.support-overview-grid,
+.support-story-grid,
+.support-outcomes-grid {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.support-step-icon {
+  width: 60px;
+  height: 60px;
+  flex: 0 0 60px;
+}
+
+.support-accent {
+  width: 48px;
+  flex: 0 0 48px;
+}
+
+.support-image-frame {
+  clip-path: none;
+}
+
+@media (min-width: 1024px) {
+  .support-overview-grid {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  }
+
+  .support-story-grid {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+  }
+
+  .support-outcomes-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 3fr) repeat(
+        4,
+        minmax(0, 2fr)
+      );
+  }
+
+  .support-image-frame {
+    clip-path: polygon(13% 0, 100% 0, 100% 100%, 0 100%);
+  }
+}
