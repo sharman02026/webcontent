@@ -1,9 +1,32 @@
 import { useState } from "react";
 import { Check } from "lucide-react";
 import { Heading, Meta, PageHero } from "../components/UI";
+import { submitInquiry } from "../services/inquiries";
 
 export function Contact() {
   const [sent, setSent] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+    if (submitting) return;
+
+    const form = event.currentTarget;
+    setSubmitting(true);
+    setError("");
+
+    try {
+      await submitInquiry(Object.fromEntries(new FormData(form).entries()));
+      form.reset();
+      setSent(true);
+    } catch (submissionError) {
+      setError(submissionError.message);
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
   return (
     <>
       <Meta
@@ -40,11 +63,15 @@ export function Contact() {
               <span>Enquiry received</span>
               <h2>Thank you for reaching out.</h2>
               <p>
-                Your message has been recorded in this demonstration interface.
+                Your message has been recorded. Our team will contact you
+                shortly.
               </p>
               <button
                 className="flex items-center gap-2 border-0 bg-transparent py-5 font-bold text-brand-olive"
-                onClick={() => setSent(false)}
+                onClick={() => {
+                  setError("");
+                  setSent(false);
+                }}
               >
                 Send another enquiry
               </button>
@@ -52,10 +79,7 @@ export function Contact() {
           ) : (
             <form
               className="grid min-w-0 gap-5 border border-stone-300 bg-white p-5 shadow-xl sm:p-6 md:grid-cols-2 md:p-10 [&_label]:min-w-0 [&_label]:flex [&_label]:flex-col [&_label]:gap-2 [&_label]:text-[10px] [&_label]:font-bold [&_label]:uppercase [&_input]:min-w-0 [&_input]:w-full [&_input]:border-0 [&_input]:border-b [&_input]:border-stone-300 [&_input]:bg-stone-50 [&_input]:p-3.5 [&_input]:text-base [&_input]:font-normal [&_input]:normal-case [&_input]:outline-none focus:[&_input]:border-brand-orange [&_select]:min-w-0 [&_select]:w-full [&_select]:border-0 [&_select]:border-b [&_select]:border-stone-300 [&_select]:bg-stone-50 [&_select]:p-3.5 [&_select]:text-base [&_select]:font-normal [&_select]:normal-case [&_textarea]:min-w-0 [&_textarea]:w-full [&_textarea]:border-0 [&_textarea]:border-b [&_textarea]:border-stone-300 [&_textarea]:bg-stone-50 [&_textarea]:p-3.5"
-              onSubmit={(e) => {
-                e.preventDefault();
-                setSent(true);
-              }}
+              onSubmit={handleSubmit}
             >
               <Field label="Full name" name="name" />
               <Field label="Company name" name="company" />
@@ -63,7 +87,7 @@ export function Contact() {
               <Field label="Phone" name="phone" type="tel" />
               <label className="md:col-span-2">
                 Inquiry type
-                <select required defaultValue="">
+                <select name="inquiryType" required defaultValue="">
                   <option value="" disabled>
                     Select an inquiry
                   </option>
@@ -81,13 +105,22 @@ export function Contact() {
               </label>
               <label className="md:col-span-2">
                 Message
-                <textarea rows="5" required />
+                <textarea name="message" rows="5" required />
               </label>
+              {error && (
+                <p
+                  className="m-0 border-l-2 border-red-600 bg-red-50 px-4 py-3 text-sm text-red-700 md:col-span-2"
+                  role="alert"
+                >
+                  {error}
+                </p>
+              )}
               <button
-                className="inline-flex items-center justify-center gap-2.5 border border-brand-orange bg-brand-orange px-5 py-3.5 text-xs font-bold uppercase text-white transition hover:bg-[#c95613] md:col-span-2"
+                className="inline-flex items-center justify-center gap-2.5 border border-brand-orange bg-brand-orange px-5 py-3.5 text-xs font-bold uppercase text-white transition hover:bg-[#c95613] disabled:cursor-not-allowed disabled:opacity-60 md:col-span-2"
                 type="submit"
+                disabled={submitting}
               >
-                Send enquiry
+                {submitting ? "Sending..." : "Send enquiry"}
               </button>
             </form>
           )}

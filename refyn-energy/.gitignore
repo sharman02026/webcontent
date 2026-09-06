@@ -8,9 +8,15 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
+.npm-cache
+.test-tools
 dist
 dist-ssr
 *.local
+.env
+.env.*
+!.env.example
+*service-account*.json
 
 # Editor directories and files
 .vscode/*
