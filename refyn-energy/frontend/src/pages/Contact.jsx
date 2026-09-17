@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Check } from "lucide-react";
 import { Heading, Meta, PageHero } from "../components/UI";
-import { submitInquiry } from "../services/inquiries";
+import { submitInquiry } from "../services/inquiryApi";
 
 export function Contact() {
   const [sent, setSent] = useState(false);

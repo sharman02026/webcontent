@@ -13,7 +13,7 @@ export function Values() {
         eyebrow="Our guiding principles"
         title="What we stand for"
         text="Values that shape how we engineer, operate and partner."
-        image={engineers}
+        
       />
       <section className="bg-brand-paper py-20 lg:py-24">
         <div className="mx-auto w-full max-w-[1240px] px-5 md:px-8">

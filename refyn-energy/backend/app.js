@@ -15,9 +15,7 @@ app.use(
     origin(origin, callback) {
       if (!origin || allowedOrigins.includes(origin))
         return callback(null, true);
-      const error = new Error("Origin is not allowed");
-      error.code = "ORIGIN_NOT_ALLOWED";
-      return callback(error);
+      return callback(new Error("Origin is not allowed"));
     },
   }),
 );
@@ -30,12 +28,6 @@ app.use("/api/inquiries", inquiryRouter);
 
 app.use((error, _request, response, _next) => {
   void _next;
-  if (error.code === "ORIGIN_NOT_ALLOWED") {
-    return response.status(403).json({
-      success: false,
-      message: "This website origin is not allowed to access the API.",
-    });
-  }
   if (error instanceof SyntaxError && "body" in error) {
     return response
       .status(400)

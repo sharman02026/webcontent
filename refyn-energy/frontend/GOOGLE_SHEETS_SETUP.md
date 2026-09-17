@@ -28,9 +28,11 @@ Google account. The shared secret still rejects direct unauthorized writes.
 CORS configuration is unnecessary on Apps Script because only Express calls it;
 the browser never receives the webhook URL or secret.
 
-## 2. Configure the application
+## 2. Configure the separate API
 
-Copy `.env.example` to `.env` and set:
+The backend is an independent project at `D:\\refyn-energy-api`. Deploy that
+folder separately from the React frontend. Copy
+`D:\\refyn-energy-api\\.env.example` to `D:\\refyn-energy-api\\.env` and set:
 
 ```env
 PORT=3001
@@ -38,7 +40,6 @@ CLIENT_ORIGIN=http://localhost:5173
 GOOGLE_APPS_SCRIPT_URL=https://script.google.com/macros/s/DEPLOYMENT_ID/exec
 GOOGLE_APPS_SCRIPT_SECRET=the-same-script-property-secret
 REQUEST_TIMEOUT_MS=10000
-VITE_API_BASE_URL=
 ```
 
 For multiple allowed frontend origins, separate `CLIENT_ORIGIN` values with
@@ -50,7 +51,9 @@ the browser.
 Run the backend and frontend in separate terminals:
 
 ```bash
-npm run dev:server
+cd D:\refyn-energy-api
+npm install
+npm run dev
 npm run dev
 ```
 
@@ -62,7 +65,8 @@ new row appears in `Inquiries`. The first row will contain:
 Automated checks:
 
 ```bash
-npm run test:server
+cd D:\refyn-energy-api
+npm test
 npm run lint
 npm run build
 ```
@@ -74,11 +78,12 @@ error. Restore the URL afterward.
 
 ## 4. Production deployment
 
-1. Deploy the React build and Express server on services that support Node.js.
-2. Add the backend variables from `.env.example` in the hosting provider's
+1. Deploy `D:\\refyn-energy-api` as its own Node.js service. Its build command is `npm install`
+   and start command is `npm start`.
+2. Add the backend variables from `D:\\refyn-energy-api\\.env.example` in the hosting provider's
    secret/environment settings. Do not upload `.env`.
 3. Set `CLIENT_ORIGIN` to the exact public frontend origin.
-4. If frontend and API use different origins, build React with
+4. Deploy the React app separately. If frontend and API use different origins, build React with
    `VITE_API_BASE_URL=https://api.example.com`.
 5. If both are routed through one domain, leave `VITE_API_BASE_URL` empty and
    proxy `/api/*` to the Express service at the hosting/reverse-proxy layer.

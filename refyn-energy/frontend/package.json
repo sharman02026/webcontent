@@ -4,11 +4,6 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "server:dev": "node --watch server/app.js",
-    "dev:server": "npm run server:dev",
-    "start": "node server/app.js",
-    "test": "node --test server/controllers/*.test.js",
-    "test:server": "npm test",
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
@@ -17,11 +12,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "cors": "^2.8.6",
-    "dotenv": "^17.4.2",
-    "express": "^5.2.1",
     "framer-motion": "^13.2.0",
-    "google-auth-library": "^11.0.2",
     "lucide-react": "^1.39.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
